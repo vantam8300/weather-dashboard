@@ -1,0 +1,4 @@
+.custom-header {
+    background-color: blue; /* For browsers that do not support gradients */
+    background-image: linear-gradient(to right, rgb(74, 124, 240) , rgb(30, 20, 210));
+}
