@@ -27,7 +27,7 @@ function handleSubmitForm(event) {
     let cityName = city.val();
     // get Lat and Lon given city name
     if (cityName) {
-        var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + APIKey + "&units=imperial";
+        var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + APIKey + "&units=imperial";
 
         // save a new city
         saveCities(cityName);
@@ -42,9 +42,11 @@ function handleSubmitForm(event) {
 function fectchData(queryURL) {
     fetch(queryURL)
         .then(function (response) {
-
-            return response.json();
-
+            if (response.ok) {
+                return response.json();
+            } else {
+                return
+            }
         }).then(function (data) {
 
             printToday(data);
@@ -53,7 +55,7 @@ function fectchData(queryURL) {
             let lat = data.coord.lat;
 
             // pass lat and lon to 5 days forecast API
-            let queryURL = "http://api.openweathermap.org/data/2.5/forecast?lat="
+            let queryURL = "https://api.openweathermap.org/data/2.5/forecast?lat="
                 + lat + "&lon=" + lon + "&appid=" + APIKey + "&units=imperial";
 
             return fetch(queryURL);
@@ -105,7 +107,7 @@ function printToday(data) {
 
     var name = data.name;
 
-    var icon = "http://openweathermap.org/img/wn/" + data.weather[0].icon + ".png";
+    var icon = "https://openweathermap.org/img/wn/" + data.weather[0].icon + ".png";
 
     let header = $(`<h2>${name + " " + day} <img src="${icon}" width="50"></img> </h2>`);
 
@@ -137,7 +139,7 @@ function print5Days(data) {
         var day = handleTime(data.list[i].dt)
         let header = $(`<h5>${day}</h5>`);
 
-        var icon = "http://openweathermap.org/img/wn/" + data.list[i].weather[0].icon + ".png";
+        var icon = "https://openweathermap.org/img/wn/" + data.list[i].weather[0].icon + ".png";
         let iconEl = `<img src="${icon}" width="50"></img>`
 
         let temp = data.list[i].main.temp;
@@ -166,7 +168,7 @@ form.on("submit", handleSubmitForm);
 // when searched city is clicked
 displaycitiesDiv.on("click", ".btn", function (event) {
     var cityName = $(event.currentTarget).val();
-    var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + APIKey + "&units=imperial";
+    var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + APIKey + "&units=imperial";
 
     // fetch API
     fectchData(queryURL);
