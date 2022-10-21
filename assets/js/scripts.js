@@ -48,7 +48,6 @@ function fectchData(queryURL) {
                 return
             }
         }).then(function (data) {
-            console.log(data);
             printToday(data);
 
             let lon = data.coord.lon;
@@ -65,17 +64,11 @@ function fectchData(queryURL) {
             return response.json();
 
         }).then(function (data) {
-            console.log(data)
-            printTime(data);
             print5Days(data);
 
         });
 }
-function printTime(data) {
-    for (var i=0; i<data.list.length; i++) {
-        console.log(i, moment.unix(data.list[i].dt).format("(DD/MM/YYYY) hh:mm"))
-    }
-}
+
 
 // display list of searched cities
 function displayCities() {
