@@ -48,7 +48,7 @@ function fectchData(queryURL) {
                 return
             }
         }).then(function (data) {
-
+            console.log(data);
             printToday(data);
 
             let lon = data.coord.lon;
@@ -65,10 +65,16 @@ function fectchData(queryURL) {
             return response.json();
 
         }).then(function (data) {
-
+            console.log(data)
+            printTime(data);
             print5Days(data);
 
         });
+}
+function printTime(data) {
+    for (var i=0; i<data.list.length; i++) {
+        console.log(i, moment.unix(data.list[i].dt).format("(DD/MM/YYYY) hh:mm"))
+    }
 }
 
 // display list of searched cities
@@ -93,9 +99,13 @@ function saveCities(name) {
 // get day, month, and year from API response
 function handleTime(time) {
 
-    var day = moment.unix(time).format("(DD/MM/YYYY)");
+    var year = time.slice(0, 4);
 
-    return day;
+    var month = time.slice(5, 7);
+
+    var day = time.slice(8, 10);
+
+    return "(" + day + "/" + month + "/" + year + ")";
 
 }
 
@@ -103,7 +113,7 @@ function handleTime(time) {
 function printToday(data) {
     displayToDayDiv.text("");
 
-    var day = handleTime(data.dt)
+    var day = moment.unix(data.dt).format("(DD/MM/YYYY)");
 
     var name = data.name;
 
@@ -133,10 +143,10 @@ function print5Days(data) {
     display5daysDiv.append('<h2 class="row">5-Day Forecast: </h2>');
     display5daysDiv.append('<div class="row d-flex justify-content-between" id="fiveDaycontainer">');
     var fiveDaycontainer = $("#fiveDaycontainer");
-    for (var i = 1; i < data.list.length; i = i + 8) {
+    for (var i = 0; i < data.list.length; i = i + 8) {
         var oneDayContainer = $("<div class='col-2 bg-dark text-light'>")
 
-        var day = handleTime(data.list[i].dt)
+        var day = handleTime(data.list[i].dt_txt)
         let header = $(`<h5>${day}</h5>`);
 
         var icon = "https://openweathermap.org/img/wn/" + data.list[i].weather[0].icon + ".png";
